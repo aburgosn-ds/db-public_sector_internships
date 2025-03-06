@@ -20,7 +20,7 @@ def get_requirements(file_path:str) -> List[str]:
     return requirements
 
 
-# Configures the setup
+# Configures the package metadata
 setup(
     name='db_project',
     version='0.0.1',

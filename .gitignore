@@ -6,3 +6,13 @@ notebooks/
 
 # Local project package in editable mode
 db_project.egg-info/
+
+# Environment variables
+.env
+
+# Python Cache files
+*/__pycache__/
+*/*/__pycache__
+
+# Logs
+logs/

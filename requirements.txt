@@ -1,5 +1,5 @@
 python-dotenv==1.0.1
 sqlalchemy==2.0.38
-PyMySQL==1.1.1
+mysql-connector-python==9.2.0
 cryptography==43.0.3
 #-e .

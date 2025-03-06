@@ -12,11 +12,11 @@ LOG_FILE_PATH = os.path.join(log_path, LOG_FILENAME)
 
 
 logging.basicConfig(
-    # filename=LOG_FILE_PATH,
-    filename='testlog.log',
+    filename=LOG_FILE_PATH,
     format="[ %(asctime)s ] %(name)s %(module)s %(filename)s %(lineno)d - %(levelname)s - %(message)s",
-    level=logging.INFO
+    level=logging.INFO,
+    force=True
 )
 
-
-logging.info('es un debug')
+# Create a new logger
+logger = logging.getLogger('logger')

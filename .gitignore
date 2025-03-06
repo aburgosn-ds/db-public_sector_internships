@@ -3,3 +3,6 @@ venv/
 
 # Notebooks for quick tests
 notebooks/
+
+# Local project package in editable mode
+db_project.egg-info/

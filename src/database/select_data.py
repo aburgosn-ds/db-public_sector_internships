@@ -1,0 +1,60 @@
+from sqlalchemy import select
+from src.database.db_connection import get_connection
+from src.database.load_db_metadata import load_metadata
+from src.exception import CustomException
+from src.logger import logger
+
+import sys
+
+# Get engine
+engine = get_connection()
+
+
+def select_column(table_name, column_name, limit=None):
+    '''
+    This function selects all column rows from a table from the database
+    '''
+
+    metadata = load_metadata()
+    table = metadata.tables[table_name]
+
+    with engine.connect() as connection:
+        try:
+            select_query = select(table.c[column_name]).limit(limit)
+
+            result = connection.execute(select_query).fetchall()
+            logger.info(f"{len(result)} rows where succesfully selected from *{table_name}* table and *{column_name}* column")
+            return result
+
+        except Exception as e:
+            raise CustomException(e, sys)
+
+
+def select_id(table_name, column_name, col_value, limit=None):
+    '''
+    This function selects the id(s) from a table whose column value is col_value
+    '''
+
+    metadata = load_metadata()
+    table = metadata.tables[table_name]
+
+    with engine.connect() as connection:
+        try:
+            select_query = select(table.c.id).where(table.c[column_name] == col_value).limit(limit)
+
+            result = connection.execute(select_query).fetchall()
+            logger.info(f"Id of {col_value} from {table_name} table and {column_name} column successfully")
+            
+            if len(result) > 0:
+                result = [res._tuple()[0] for res in result]
+
+            return result
+
+        except Exception as e:
+            raise CustomException (e, sys)
+        
+
+if __name__=='__main__':
+    a = select_column('organizations', 'city')
+    if a:
+        print(a)

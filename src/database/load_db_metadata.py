@@ -8,8 +8,11 @@ import sys
 # Get engine
 engine = get_connection()
 
-# Load database metadata
+# 
 def load_metadata():
+    '''
+    This functin loads and returns the database metadata
+    '''
     try:
         metadata = MetaData()
         metadata.reflect(bind=engine) # Load all tables present in the db

@@ -18,12 +18,14 @@ def select_column(table_name, column_name, limit=None):
     metadata = load_metadata()
     table = metadata.tables[table_name]
 
+    # Opens a connection with the db and selects the column values
     with engine.connect() as connection:
         try:
             select_query = select(table.c[column_name]).limit(limit)
 
+            # Executes the query and gets the output
             result = connection.execute(select_query).fetchall()
-            logger.info(f"{len(result)} rows where succesfully selected from *{table_name}* table and *{column_name}* column")
+            logger.info(f"{len(result)} rows where succesfully selected from *{table_name}({column_name})*")
             return result
 
         except Exception as e:
@@ -38,13 +40,17 @@ def select_id(table_name, column_name, col_value, limit=None):
     metadata = load_metadata()
     table = metadata.tables[table_name]
 
+    # Opens a connection with the db and performs operations 
     with engine.connect() as connection:
         try:
+            # Selects id with condition
             select_query = select(table.c.id).where(table.c[column_name] == col_value).limit(limit)
 
+            # Executes the query and gets the output
             result = connection.execute(select_query).fetchall()
             logger.info(f"Id of {col_value} from {table_name} table and {column_name} column successfully")
             
+            # Get the output as a list of tuples
             if len(result) > 0:
                 result = [res._tuple()[0] for res in result]
 

@@ -14,13 +14,13 @@ load_dotenv()
 USERNAME = os.getenv('DB_USER')
 PASSWORD = os.getenv('DB_PASSWORD')
 HOST = os.getenv('DB_HOST')
-PORT = '3306'
-DATABASE = 'public_sector_internships'
+PORT = os.getenv('DB_PORT')
+DATABASE = os.getenv('DB_NAME')
 
 
 def get_connection():
     '''
-    Gets the engine connection
+    Gets the connection engine
     '''
     # URL for database connection
     DATABASE_URL = f"mysql+mysqlconnector://{USERNAME}:{PASSWORD}@{HOST}:{PORT}/{DATABASE}"
@@ -38,8 +38,3 @@ def get_connection():
     
     except Exception as e:
         raise CustomException(e, sys)
-    
-
-if __name__ == "__main__":
-    a = get_connection()
-    print(a)

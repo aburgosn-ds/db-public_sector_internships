@@ -6,15 +6,11 @@ from src.logger import logger
 
 import sys
 
-# Get engine
-engine = get_connection()
-
-
 def select_column(table_name, column_name, limit=None):
     '''
     This function selects all column rows from a table from the database
     '''
-
+    engine = get_connection() # Get engine
     metadata = load_metadata()
     table = metadata.tables[table_name]
 
@@ -36,7 +32,7 @@ def select_id(table_name, column_name, col_value, limit=None):
     '''
     This function selects the id(s) from a table whose column value is col_value
     '''
-
+    engine = get_connection() # Get engine
     metadata = load_metadata()
     table = metadata.tables[table_name]
 
@@ -44,7 +40,11 @@ def select_id(table_name, column_name, col_value, limit=None):
     with engine.connect() as connection:
         try:
             # Selects id with condition
-            select_query = select(table.c.id).where(table.c[column_name] == col_value).limit(limit)
+            if type(col_value) == list:
+                select_query = select(table.c.id).where(table.c[column_name].in_(col_value)).limit(limit)
+
+            elif type(col_value) == str:
+                select_query = select(table.c.id).where(table.c[column_name] == col_value).limit(limit)
 
             # Executes the query and gets the output
             result = connection.execute(select_query).fetchall()
@@ -58,9 +58,3 @@ def select_id(table_name, column_name, col_value, limit=None):
 
         except Exception as e:
             raise CustomException (e, sys)
-        
-
-if __name__=='__main__':
-    a = select_column('organizations', 'city')
-    if a:
-        print(a)

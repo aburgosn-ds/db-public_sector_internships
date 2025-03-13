@@ -6,12 +6,11 @@ from src.logger import logger
 from src.exception import CustomException
 
 
-metadata = load_metadata()
 class Cities:
 
     def __init__(self):
         self.table_name = 'cities'
-        self.table = metadata.tables[self.table_name]
+        self.table = load_metadata().tables[self.table_name]
         self.columns = self.table.columns.keys()
 
     def insert_rows(self, json):

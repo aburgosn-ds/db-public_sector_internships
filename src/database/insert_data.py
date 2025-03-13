@@ -4,19 +4,18 @@ from src.database.load_db_metadata import load_metadata
 from src.database.select_data import select_id
 from src.exception import CustomException
 from src.logger import logger
-from src.utils import change_key_value
+from src.utils import multiply_dicts
 
 from typing import List, Dict
 
 import sys
 
-# Get engine
-engine = get_connection()
-
-def insert_rows(table_name, json: List[Dict]):
+def insert_rows(table_name, json: List[Dict], one_by_one:bool = True, get_pk:bool = True):
     '''
     This functions inserts new rows into a table in the database
     '''
+    
+    engine = get_connection()   # Get engine
     metadata = load_metadata()
     table = metadata.tables[table_name]
     
@@ -24,20 +23,30 @@ def insert_rows(table_name, json: List[Dict]):
     with engine.connect() as connection:
         try:
             insert_query = insert(table)
-
+            inserted_ids = []
             # Executes the query and commits if all ok
-            result = connection.execute(insert_query, json)
+            if one_by_one:
+                for data in json:
+                    # result_one = connection.execute(insert_query, data)
+                    result_one = connection.execute(insert_query, data)
+                    if get_pk:
+                        inserted_ids.append(result_one.inserted_primary_key[0])
+            
+            # else:
+            #     result = connection.execute(insert_query, json)
+
             connection.commit()
 
             logger.info(f"Row(s) inserted succesfully in *{table_name}* table.")
-
+            return inserted_ids
+        
         except Exception as e:
             # Rollbacks if there is an error
             connection.rollback()
             raise CustomException(e, sys)
         
 
-def insert_rows_dinamically(table_name:str, columns:List[str], ref_tables_name:List[str], ref_columns:List[str], json:List[Dict]):
+def insert_rows_dinamically(table_name:str, columns:List[str], ref_tables_name:List[str], ref_columns:List[str], json:List[Dict], connection_tables:List[str]):
     '''
     This function inserts new rows into a table dinamically, when this table has one or more foreign keys.
     Adds data to the table if the referenced columns has values or add a value into the referenced table first.
@@ -47,31 +56,50 @@ def insert_rows_dinamically(table_name:str, columns:List[str], ref_tables_name:L
         # Json to be added into the main table
         new_json = []
         
-        # For each dict in json, changes the keys-values with appropriate ones for inserting into the main table
+        # For each dict in json, appends new keys-values for inserting into the main table
         for dict_ in json:
             new_dict_ = dict_.copy()
 
             # For each referenced table performs the changes in the dict
             for ref_table_name, ref_column, column in zip(ref_tables_name, ref_columns, columns):
                 
-                # Gets the id if exists of the ref_colum value in the referenced table 
-                id = select_id(ref_table_name, ref_column, dict_[ref_column])
+                ref_column_in_json = ref_column[0]
+                ref_column_in_ref = ref_column[1]
+                
+                # Gets the id if exists the ref_colum value in the referenced table 
+                id = select_id(ref_table_name, ref_column_in_ref, new_dict_[ref_column_in_json])
 
                 # Changes the key-value pair when id exists or not exists
                 if id:
-                    new_dict_ = change_key_value(new_dict_, {ref_column:new_dict_[ref_column]}, {column: id[0]})
+                    new_dict_[column] = id[0]
 
                 else:
-                    json_for_reftable = [{ref_column : new_dict_[ref_column]}]
-                    insert_rows(ref_table_name, json_for_reftable) # Adds data into the referenced table
+                    json_for_reftable = []
+                    ref_value = new_dict_[ref_column_in_json]
 
-                    new_id = select_id(ref_table_name, ref_column, dict_[ref_column]) # Gets the id of the data inserted
-                    new_dict_ = change_key_value(new_dict_, {ref_column:new_dict_[ref_column]}, {column: new_id[0]})
-                
-            # Adds the dictionary with keys-values changed into the new json 
+                    if type(ref_value) == list:
+                        json_for_reftable = [{ref_column_in_ref : ref_value_i} for ref_value_i in ref_value]
+                    else:
+                        json_for_reftable = [{ref_column_in_ref : ref_value}]    
+                    
+                    new_ids = insert_rows(ref_table_name, json_for_reftable) # Adds data into the referenced table and gets the ids
+                    print(json_for_reftable)
+
+                    if len(new_ids) == 1:
+                        new_dict_[column] = new_ids[0]
+                    else:
+                        new_dict_[column] = new_ids
+            
+            # Adds the dictionary with keys-values added into the new json 
             new_json.append(new_dict_)
-                
-        insert_rows(table_name, new_json) # Inserts the new json into the main table
+            print(new_json)
+
+        main_ids = insert_rows(table_name, new_json) # Inserts the new json into the main table
+        con_ids = [{'offer_id' : offer_id, 'career_id': list_careers_id} for offer_id, list_careers_id in zip(main_ids, [ dict_['career_id'] for dict_ in new_json ])] 
+
+        print(con_ids)
+        insert_rows(connection_tables, multiply_dicts(con_ids), get_pk=False)
+
         logger.info(f"Data insered into *{table_name}({str(ref_tables_name)})*")
 
     except Exception as e:

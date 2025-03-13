@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 from src.exception import CustomException
 import pandas as pd
 from typing import List, Dict
+import json
 
 def get_soup(url):
     '''
@@ -153,6 +154,12 @@ def multiply_dicts(json: List[Dict]):
     return new_json
 
 
+def write_to_file(data: list, filename: str):
+        '''
+        Writes data to a json file.
+        '''
+        with open(filename, 'w', encoding='utf-8') as file:
+            file.write(json.dumps(data, ensure_ascii=False))
 
 def main():
     json = [{'offer_id': 15, 'career_id': [13, 14, 15]}]

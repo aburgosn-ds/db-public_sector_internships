@@ -16,3 +16,7 @@ db_project.egg-info/
 
 # Logs
 logs/
+
+# Test files
+test.py
+temp.json

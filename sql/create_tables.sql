@@ -1,7 +1,12 @@
-CREATE TABLE IF NOT EXISTS locations (
+CREATE TABLE IF NOT EXISTS specific_locations (
 	`id` INT AUTO_INCREMENT,
-    `city` VARCHAR(40),
-    `specific_location` VARCHAR(200),
+    `address` VARCHAR(200) UNIQUE,
+    PRIMARY KEY (`id`)
+);
+
+CREATE TABLE IF NOT EXISTS cities (
+	`id` INT AUTO_INCREMENT,
+    `name` VARCHAR(50) UNIQUE,
     PRIMARY KEY (`id`)
 );
 
@@ -18,18 +23,20 @@ CREATE TABLE IF NOT EXISTS offers (
     `offer_title` VARCHAR(200) DEFAULT NULL,
     `vacants` TINYINT UNSIGNED DEFAULT NULL,
     `type` ENUM('pre-profesional', 'profesional') DEFAULT NULL,
-    `organization_id` INT DEFAULT NULL,
     `to_apply` TEXT DEFAULT NULL,
+    `organization_id` INT DEFAULT NULL,
     `specific_requirements` TEXT DEFAULT NULL,
     `knowledge` TEXT DEFAULT NULL,
     `salary` DECIMAL(6,2) DEFAULT NULL,
     `responsabilities` TEXT DEFAULT NULL,
-    `location_id` INT DEFAULT NULL,
+    `specific_location_id` INT DEFAULT NULL,
+    `city_id` INT DEFAULT NULL, 
     `end_date` DATE DEFAULT NULL,
     `url` VARCHAR(200) NOT NULL,
     PRIMARY KEY (`id`),
-    FOREIGN KEY (`organization_id`) REFERENCES `organizations`(`id`),
-    FOREIGN KEY (`location_id`) REFERENCES `locations`(`id`)
+    FOREIGN KEY (`specific_location_id`) REFERENCES `specific_locations`(`id`),
+    FOREIGN KEY (`city_id`) REFERENCES `cities`(`id`),
+    FOREIGN KEY (`organization_id`) REFERENCES `organizations`(`id`)
 );
 
 CREATE TABLE IF NOT EXISTS careers(

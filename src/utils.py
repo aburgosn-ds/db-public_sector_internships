@@ -3,6 +3,7 @@ import sys
 from bs4 import BeautifulSoup
 from src.exception import CustomException
 import pandas as pd
+from typing import List, Dict
 
 def get_soup(url):
     '''
@@ -92,19 +93,74 @@ def change_key_value(dict_:dict, key_value:dict, new_key_value:dict):
     key = list(key_value.keys())[0]
     new_key = list(new_key_value.keys())[0]
 
-    new_keys = list(dict_.keys()).copy()
-    new_keys[new_keys.index(key)] = new_key
+    new_keys = list(dict_.keys()).copy() # List of old keys
+    new_keys[new_keys.index(key)] = new_key # Changes the old key with the new key
 
     value = list(key_value.values())[0]
     new_value = list(new_key_value.values())[0]
 
-    new_values = list(dict_.values()).copy()
-    new_values[new_values.index(value)] = new_value
+    new_values = list(dict_.values()).copy() # List of old values
+    new_values[new_values.index(value)] = new_value # Changes the old value with the new value
 
+    # Joins new keys and new values into a dictionary
     new_dict_ = {key: value for key,value in zip(new_keys, new_values)}
 
     return new_dict_
 
-a = {'a': 1, 'b': 2}
 
-print(change_key_value(a, {'a': 1}, {'hola': 20}))
+def split_list(list_:list, n:int=10) -> List[str]:
+    '''
+    This function splits a list into lists of lenght n
+    '''
+
+    n_values = len(list_)
+    n_lists = []
+
+    if n < n_values:
+        partitions = (n_values // n)
+
+        for i in range(partitions):
+            if n_values % n == 0:
+                n_lists.append(list_[n*i:n*(i+1)])
+
+    else:
+        n_lists.append(list_)
+    
+    return n_lists
+
+
+def filter_key_value(json:List[Dict], include_keys:List):
+    '''
+    This function filters key-value pairs for each dictionary in a list of dictionaries
+    '''
+    filtered_json = []
+
+    for dict_ in json:
+        temp_dict = dict_.copy()
+        for key in dict_:
+            if key not in include_keys:
+                temp_dict.pop(key)
+        filtered_json.append(temp_dict)
+
+    return filtered_json
+
+def multiply_dicts(json: List[Dict]):
+    new_json = []
+    for dict_ in json:
+        new_dicts = [{'offer_id': dict_['offer_id'], 'career_id': career_id} for career_id in dict_['career_id']]
+        new_json.extend(new_dicts)
+
+    return new_json
+
+
+
+def main():
+    json = [{'offer_id': 15, 'career_id': [13, 14, 15]}]
+
+    print(multiply_dicts(json))
+    
+
+if __name__=='__main__':
+    main()
+
+

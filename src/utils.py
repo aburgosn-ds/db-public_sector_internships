@@ -3,7 +3,7 @@ import sys
 from bs4 import BeautifulSoup
 from src.exception import CustomException
 import pandas as pd
-from typing import List, Dict
+from typing import List, Dict, Union
 import json
 
 def get_soup(url):
@@ -160,6 +160,50 @@ def write_to_file(data: list, filename: str):
         '''
         with open(filename, 'w', encoding='utf-8') as file:
             file.write(json.dumps(data, ensure_ascii=False))
+
+
+def read_to_json(filepath: str) -> Union[List[Dict], Dict]:
+    '''
+    Reads text JSON formatted to a JSON python objett
+    '''
+    with open(filepath, 'r', encoding='utf-8') as file:
+        text = file.read()
+        return json.loads(text)
+    
+
+
+def get_careers(dict_careers):
+    '''
+    Extract a list of all careers.
+    '''
+    careers = []
+
+    for education_field in dict_careers:
+        specific_fields = dict_careers[education_field]
+        for specific_field in specific_fields:
+            detail_fields = specific_fields[specific_field]
+            for detail_field in detail_fields:
+                careers_inside = detail_fields[detail_field]
+                careers.extend(careers_inside)
+
+    return clean_careers(careers)
+
+
+def clean_careers(careers, sort=True):
+    '''
+    Cleans the added slash (/) for some careers and sort the list.
+    '''
+    careers_cleaned = []
+    for career in careers:
+        if "/" in career:
+            careers_cleaned.append(career[:-3])
+        else:
+            careers_cleaned.append(career)
+
+    if sort:
+        careers_cleaned.sort()
+
+    return careers_cleaned
 
 def main():
     json = [{'offer_id': 15, 'career_id': [13, 14, 15]}]

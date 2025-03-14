@@ -18,11 +18,11 @@ class Offers:
 
     def insert_rows_dinamically(self, json):
         insert_rows_dinamically(self.table_name, 
-                                columns=['specific_location_id', 'city_id', 'organization_id', 'career_id'], 
+                                columns=['specific_location_id', 'city_id', 'organization_id', 'careers_id'], 
                                 ref_tables_name=['specific_locations', 'cities', 'organizations', 'careers'], 
                                 ref_columns=[('specific_location', 'address'), ('city', 'name'), ('organization', 'name'), ('careers', 'name')], 
                                 json=json,
-                                connection_tables='careers_per_offer')
+                                connection_table='careers_per_offer')
         
     def select_column(self, column_name, limit=None):
         return select_column(self.table_name, column_name, limit)

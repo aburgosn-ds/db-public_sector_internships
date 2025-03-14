@@ -204,14 +204,3 @@ def clean_careers(careers, sort=True):
         careers_cleaned.sort()
 
     return careers_cleaned
-
-def main():
-    json = [{'offer_id': 15, 'career_id': [13, 14, 15]}]
-
-    print(multiply_dicts(json))
-    
-
-if __name__=='__main__':
-    main()
-
-

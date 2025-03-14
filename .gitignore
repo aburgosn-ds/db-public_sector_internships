@@ -11,8 +11,7 @@ db_project.egg-info/
 .env
 
 # Python Cache files
-*/__pycache__/
-*/*/__pycache__
+*/**/__pycache__
 
 # Logs
 logs/

@@ -33,7 +33,7 @@ def select_id(table_name, column_name, col_value, limit=None):
     This function selects the id(s) from a table whose column value is col_value
     '''
     engine = get_connection() # Get engine
-    metadata = load_metadata()
+    metadata = load_metadata(engine)
     table = metadata.tables[table_name]
 
     # Opens a connection with the db and performs operations 

@@ -48,7 +48,7 @@ def select_id(table_name, column_name, col_value, limit=None):
 
             # Executes the query and gets the output
             result = connection.execute(select_query).fetchall()
-            logger.info(f"Id of {col_value} from {table_name} table and {column_name} column successfully")
+            logger.info(f"ID from table -{table_name}- searched successfully. Value to match: {col_value}")
             
             # Get the output as a list of tuples
             if len(result) > 0:
@@ -57,4 +57,5 @@ def select_id(table_name, column_name, col_value, limit=None):
             return result
 
         except Exception as e:
+            logger.info(f"Error while selecting ID from table {table_name}. Value to match: {col_value}")
             raise CustomException (e, sys)

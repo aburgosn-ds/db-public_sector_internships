@@ -5,12 +5,11 @@ from src.logger import logger
 
 import sys
 
-def load_metadata():
+def load_metadata(engine):
     '''
     This function loads and returns the database metadata
     '''
     # Get engine
-    engine = get_connection()
     try:
         metadata = MetaData()
         metadata.reflect(bind=engine) # Load all tables present in the db

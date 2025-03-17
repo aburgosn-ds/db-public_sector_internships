@@ -5,11 +5,14 @@ from src.logger import logger
 
 import sys
 
-def load_metadata(engine):
+def load_metadata(engine = None):
     '''
     This function loads and returns the database metadata
     '''
-    # Get engine
+    # Get engine if not provided
+    if not engine:
+        engine = get_connection()
+        
     try:
         metadata = MetaData()
         metadata.reflect(bind=engine) # Load all tables present in the db
@@ -18,4 +21,5 @@ def load_metadata(engine):
         return metadata
 
     except Exception as e:
+        logger.info("Error reading metadata.")
         raise CustomException(e, sys)

@@ -21,6 +21,7 @@ class Extractor:
         self.soup = get_soup(url)
         self.offers_overview = []
         self.offers_htmls = []
+        self.offers_codes = []
 
 
     def extract_offers_overview(self):
@@ -28,6 +29,7 @@ class Extractor:
         Get job offers information from the overview page, including the URL for a detailed description.
         """
         try:
+            logger.info("Extracting offers overview ...")
             offers_tag = self.soup.find_all('article', attrs={'class': 'convocatoria'})
             for offer_tag in offers_tag:
                 
@@ -38,12 +40,15 @@ class Extractor:
                 offer_code = self._extract_offer_code(url_offer)        
 
                 offer = {
-                    'offer_id': offer_code,
+                    'offer_page_code': int(offer_code),
                     'city': city,
                     'url': url_offer
                 }
-                
+
+                self.offers_codes.append(int(offer_code))
                 self.offers_overview.append(offer)
+
+            logger.info("Offers overview extraction DONE.")
 
         except AttributeError as e:
             raise(CustomException(e, sys))
@@ -120,7 +125,9 @@ class Extractor:
         '''
         Gets all offers htmls from asyncronous methos.
         '''
+        logger.info("Extracting offers htmls...")
         self.offers_htmls = asyncio.run(self._get_offers_htmls())
+        logger.info("Offers htmls extraction DONE.")
         return self.offers_htmls
     
 

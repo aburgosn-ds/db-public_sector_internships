@@ -40,15 +40,18 @@ def select_id(table_name, column_name, col_value, limit=None):
     with engine.connect() as connection:
         try:
             # Selects id with condition
-            if type(col_value) == list:
-                select_query = select(table.c.id).where(table.c[column_name].in_(col_value)).limit(limit)
+            if col_value:
+                if type(col_value) == list:
+                    select_query = select(table.c.id).where(table.c[column_name].in_(col_value)).limit(limit)
 
-            elif type(col_value) == str:
-                select_query = select(table.c.id).where(table.c[column_name] == col_value).limit(limit)
+                elif type(col_value) == str:
+                    select_query = select(table.c.id).where(table.c[column_name] == col_value).limit(limit)
+            else:
+                return []
 
             # Executes the query and gets the output
             result = connection.execute(select_query).fetchall()
-            logger.info(f"Id(s) from table *{table_name}* searched successfully. Value to match: {column_name}({col_value})")
+            logger.info(f"Id(s) from table *{table_name}* searched successfully. Value to match: {column_name}({col_value}). Found: {result}")
             
             # Get the output as a list of tuples
             if len(result) > 0:

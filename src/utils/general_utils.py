@@ -1,45 +1,22 @@
-import requests
-import sys
 import json
-import pandas as pd
-from bs4 import BeautifulSoup
-
-from src.exception import CustomException
-from src.logger import logger
-
 from typing import List, Dict, Union
 
 
-def get_careers_from_official():
+def split_list(list_: list, n: int=13) -> List[List]:
     '''
-    Gets all professional programs available in all universities in Peru
-    Source SUNEDU: https://metraslado.pe/carreras
-    '''
-    df = pd.read_excel('data/data_tables/professional_programs_raw.xlsx', sheet_name='Hoja 1', header=4, usecols=[2,3])
-    df.dropna(inplace=True)
-    careers = df['Programa'].unique().tolist()
-
-    with open('data/data_tables/professional_programs_raw.txt', 'w', encoding='utf-8') as file:
-        file.write('career\n')
-
-        for career in careers:
-            file.write(career+'\n')
-
-    return careers
-
-
-def split_list(list_:list, n:int=13) -> List[List]:
-    '''
-    This function splits a list into lists of lenght n
+    Splits a list into a list of lists of lenght n.
     '''
 
     n_values = len(list_)
-    lists = []
+    lists = [] # list of lists
 
+    # Decides if the number of lists should be one or more
     if n < n_values:
         
+        # Number of lists to split
         partitions = ((n_values // n) + 1) if (n_values % n) != 0 else (n_values//n)
 
+        # Perform the creation of lists and appends to a main list
         for i in range(partitions):
             lists.append(list_[n*i:n*(i+1)])
 
@@ -47,30 +24,6 @@ def split_list(list_:list, n:int=13) -> List[List]:
         lists.append(list_)
     
     return lists
-
-
-def filter_key_value(json:List[Dict], include_keys:List):
-    '''
-    This function filters key-value pairs for each dictionary in a list of dictionaries
-    '''
-    filtered_json = []
-
-    for dict_ in json:
-        temp_dict = dict_.copy()
-        for key in dict_:
-            if key not in include_keys:
-                temp_dict.pop(key)
-        filtered_json.append(temp_dict)
-
-    return filtered_json
-
-def multiply_dicts(json: List[Dict]):
-    new_json = []
-    for dict_ in json:
-        new_dicts = [{'offer_id': dict_['offer_id'], 'career_id': career_id} for career_id in dict_['career_id']]
-        new_json.extend(new_dicts)
-
-    return new_json
 
 
 def write_to_file(data: list, filename: str):
@@ -83,13 +36,12 @@ def write_to_file(data: list, filename: str):
 
 def read_to_json(filepath: str) -> Union[List[Dict], Dict]:
     '''
-    Reads text JSON formatted to a JSON python objett
+    Reads text JSON formatted to a JSON python object.
     '''
     with open(filepath, 'r', encoding='utf-8') as file:
         text = file.read()
         return json.loads(text)
     
-
 
 def get_careers(dict_careers):
     '''
@@ -106,7 +58,6 @@ def get_careers(dict_careers):
                 careers.extend(careers_inside)
 
     return clean_careers(careers)
-
 
 
 def clean_careers(careers, sort=True):

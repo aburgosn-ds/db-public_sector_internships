@@ -2,16 +2,12 @@ from typing import Dict, List
 import re
 
 
-def clean_json(json: List[Dict]):
+def remove_ispace(string: str):
     '''
-    Cleans all strings for all offers
+    Remove innecessary spaces.
     '''
-    cleaned_json = []
-
-    for dict_ in json:
-        cleaned_json.append(clean_dict(dict_))
-    
-    return cleaned_json
+    string = re.sub(r"\s+", " ", string)
+    return string.strip()
 
 
 def clean_dict(dict_: Dict):
@@ -36,17 +32,21 @@ def clean_dict(dict_: Dict):
     return dict_
 
 
-def remove_ispace(string: str):
+def clean_json(json: List[Dict]):
     '''
-    Remove innecessary spaces.
+    Cleans all strings for all offers.
     '''
-    string = re.sub(r"\s+", " ", string)
-    return string.strip()
+    cleaned_json = []
+
+    for dict_ in json:
+        cleaned_json.append(clean_dict(dict_))
+    
+    return cleaned_json
 
 
 def uniform_strings(dict_: Dict):
     '''
-    Converts lists values to string and set None if value is ""
+    Converts lists values to string and set None if value is "".
     '''
 
     to_change = ["specific_requirements", "knowledge", "responsabilities"]
@@ -69,7 +69,7 @@ def uniform_strings(dict_: Dict):
 
 def correct_format(json: List[Dict]):
     '''
-    Changes list values to string for all offers
+    Changes list values to string for all offers.
     '''
     new_json = []
     
@@ -80,6 +80,9 @@ def correct_format(json: List[Dict]):
 
 
 def ready_to_insert(json: List[Dict]):
+    '''
+    Clean and correct json to insert the table.
+    '''
     cleaned = clean_json(json)
     corrected = correct_format(cleaned)
     return corrected
@@ -87,5 +90,5 @@ def ready_to_insert(json: List[Dict]):
 
 def validate_offer_detail(offer_detail: Dict):
     '''
-    Assess format for each value. Returns true if the offer has a validate format, or false otherwise
+    Assess format for each value. Returns true if the offer has a validate format, or false otherwise.
     '''

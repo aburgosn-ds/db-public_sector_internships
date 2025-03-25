@@ -20,8 +20,7 @@ class Extractor:
         self.url = url
         self.soup = get_soup(url)
         self.offers_overview = []
-        self.offers_htmls = []
-        self.offers_codes = []
+        self.offers_htmls = {}
 
 
     def extract_offers_overview(self):
@@ -50,11 +49,11 @@ class Extractor:
                         'url': url_offer
                     }
 
-                    self.offers_codes.append(int(offer_code))
+                    # self.offers_codes.append(int(offer_code))
                     self.offers_overview.append(offer)
 
                 except AttributeError as e:
-                    logger.warning("Error extracting an offer, skipping it: {e} ")
+                    logger.warning(f"Error extracting an offer, skipping it: {e} ")
 
             logger.info("Offers overview extraction DONE.")
 
@@ -76,9 +75,10 @@ class Extractor:
         return urls
     
 
-    async def __get_offer_html(self, session, offer_initial: dict) -> str:
+    async def __get_offer_html(self, session, offer_initial: dict) -> dict:
         """
-        Asynchronously gets html of the whole description from an offer.
+        Asynchronously gets html of the whole description from an offer 
+        as a dict with key: offer_page_code and value: html
         """
         url = offer_initial['url']
 
@@ -96,7 +96,7 @@ class Extractor:
                     return None
         
                 html = html_1 + html_2 + "\nEND OF HTML\n" + str(offer_initial)
-                return html
+                return {offer_initial['offer_page_code']: html}
             
         except Exception as e:
             logger.warning(f"Error extracting offer html from {url}, skipping.", exc_info=True)
@@ -107,14 +107,14 @@ class Extractor:
         """
         Creates asynchronous tasks to get html descriptions for all offers.
         """
-        htmls = []
+        htmls = dict()
 
         # Create all tasks to be executed within the same context session
         tasks = [asyncio.create_task(self.__get_offer_html(session, offer_initial)) for offer_initial in offers_initial]
 
         for task in asyncio.as_completed(tasks):
             html = await task
-            htmls.append(html)  
+            htmls.update(html)  
             
         return htmls
     
@@ -132,14 +132,18 @@ class Extractor:
             return result        
         
 
-    def extract_offers_htmls(self):
+    def extract_offers_htmls(self) -> tuple[list, list]:
         '''
-        Execute asynchronous methods and gets all offers htmls.
+        Execute asynchronous methods and gets all offers htmls, returns together with its corresponding page codes.
         '''
         logger.info("Extracting offers htmls...")
         self.offers_htmls = asyncio.run(self.__session_get_offers_htmls())
         logger.info("Offers htmls extraction DONE.")
-        return self.offers_htmls
+
+        htmls = list(self.offers_htmls.values())
+        codes = list(self.offers_htmls.keys())
+
+        return htmls, codes
     
 
     @staticmethod

@@ -28,30 +28,6 @@ def get_careers_from_official():
     return careers
 
 
-def change_key_value(dict_:dict, key_value:dict, new_key_value:dict):
-    '''
-    This function changes a key-value pair from a dict to anoter key-value
-    in the same position
-    '''
-
-    key = list(key_value.keys())[0]
-    new_key = list(new_key_value.keys())[0]
-
-    new_keys = list(dict_.keys()).copy() # List of old keys
-    new_keys[new_keys.index(key)] = new_key # Changes the old key with the new key
-
-    value = list(key_value.values())[0]
-    new_value = list(new_key_value.values())[0]
-
-    new_values = list(dict_.values()).copy() # List of old values
-    new_values[new_values.index(value)] = new_value # Changes the old value with the new value
-
-    # Joins new keys and new values into a dictionary
-    new_dict_ = {key: value for key,value in zip(new_keys, new_values)}
-
-    return new_dict_
-
-
 def split_list(list_:list, n:int=13) -> List[List]:
     '''
     This function splits a list into lists of lenght n

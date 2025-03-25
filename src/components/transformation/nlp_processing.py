@@ -1,19 +1,19 @@
+import os
+import json
+import asyncio
+from dotenv import load_dotenv
+from dataclasses import dataclass
 
 import google.generativeai as genai
 from google.generativeai.types import GenerationConfig
 from google.generativeai.generative_models import GenerativeModel
 
-import os
-from dotenv import load_dotenv
-import json
-import asyncio
-from src.utils import split_list, write_to_file
-from dataclasses import dataclass
-from src.components.transformation.utils.constants import SYS_INSTRUCTIONS
+from src.utils.general_utils import split_list, write_to_file
+from src.constants.transformation_constants import SYS_INSTRUCTIONS
+from src.logger import logger
 
 load_dotenv()
 genai.configure(api_key=os.environ['API_KEY'])
-
 
 @dataclass
 class ProcessorConfig:
@@ -34,21 +34,17 @@ class ProcessorModel:
 
 class Processor:
     '''
-    Asyncronous for handling job offers details
+    Class for processing job offers details with Gemini NLP.
     '''
     def __init__(self, offers_html: list[str]):
         self.offers_html = offers_html
         self.config_model = ProcessorConfig()
-        self.processor_model = ProcessorModel(self.config_model)
+        self.processor_model = ProcessorModel(self.config_model) 
 
-
-    async def get_async_job_details(self, save: bool = True):
-        return await self._get_job_details_all(self.offers_html, save)
-    
 
     async def _get_job_details_batch(self, input: list[str]):
         '''
-        Gets the job offer details for a batch of offers
+        Gets the job offer details for a batch of offers.
         '''
         response = await self.processor_model.model.generate_content_async(contents=input)
 
@@ -65,10 +61,23 @@ class Processor:
         jsons = []
 
         for task in asyncio.as_completed(tasks):
-            json_ = await task
-            jsons.extend(json_)      
+            try:
+                json_ = await task
+                jsons.extend(json_)      
+            except Exception as e:
+                logger.warning(f"Task failed: {e}")
 
         if save:
             write_to_file(jsons, 'temp.json')
 
         return jsons
+    
+
+    def get_job_details(self, save: bool = True):
+        '''
+        Executes the asyncronous method to get the job offers details.
+        '''
+        logger.info("Getting job details with gemini...")
+        result = asyncio.run(self._get_job_details_all(self.offers_html, save))
+        logger.info("Job details extraction DONE.")
+        return result

@@ -25,16 +25,17 @@ def get_connection():
     # URL for database connection
     DATABASE_URL = f"mysql+mysqlconnector://{USERNAME}:{PASSWORD}@{HOST}:{PORT}/{DATABASE}"
 
-    # Create engine for connection
-    engine = create_engine(DATABASE_URL)
     
     # Check the engine working properly
     try:
-        connection =  engine.connect()
-        connection.close()
-        logger.info("Database engine connection created successfully and working properly")
+        # Create engine for connection
+        engine = create_engine(DATABASE_URL)
+        
+        with engine.connect() as connection:
+            logger.info("Database engine connection created successfully and working properly")
 
         return engine
     
     except Exception as e:
+        logger.error(f"Database test connection error: {e}", exc_info=True)
         raise CustomException(e, sys)

@@ -1,71 +1,14 @@
 import requests
 import sys
-from bs4 import BeautifulSoup
-from src.exception import CustomException
-import pandas as pd
-from typing import List, Dict, Union
 import json
+import pandas as pd
+from bs4 import BeautifulSoup
 
-def get_soup(url):
-    '''
-    Gets the html of a web page and parses it. Returns soup object
-    '''
-    try:
-        response = requests.get(url)
-        content = response.text
-        soup = BeautifulSoup(content, 'html.parser')
-        
-        return soup
-    
-    except Exception as e:
-        raise CustomException(e, sys)
+from src.exception import CustomException
+from src.logger import logger
 
+from typing import List, Dict, Union
 
-def get_careers_from_web():
-    '''
-    Gets all available careers from the same web as the internship offers portal
-    '''
-    # Gets the html parsed
-    soup = get_soup("https://www.convocatoriasdetrabajo.com/carreras")
-
-    try:
-        columns = soup.find_all('div', attrs={'class': 'columnas3'})[1].find_all('div', attrs={'class': 'columna'})
-
-        # Gets all careers from the page structure
-        col1 = columns[0].find('div')
-        ing_tec_cons = [tag.text for tag in col1.find_all('a')]
-        col2 = columns[1].find('div')
-        cie_mark_fin_otr = [tag.text for tag in col2.find_all('a')]
-
-        careers = ing_tec_cons + cie_mark_fin_otr
-
-        return careers
-
-    except Exception as e:
-        raise CustomException(e, sys)
-    
-
-def get_organizations_list():
-    '''
-    Gets all available organizations who offers the internships from the same web as the internship offers portal
-    '''
-    # Gets the html parsed
-    soup = get_soup("https://www.convocatoriasdetrabajo.com/organizaciones")
-
-    try:
-        org_boxes = soup.find_all('div', attrs={'class': 'card card--min'})
-        # Gets all organization from the page structure
-        organizations = []
-
-        for org_box in org_boxes:
-            organization = org_box.find('h2').text
-            organizations.append(organization)
-    
-        return organizations
-
-    except Exception as e:
-        raise CustomException(e, sys)
-    
 
 def get_careers_from_official():
     '''
@@ -109,7 +52,7 @@ def change_key_value(dict_:dict, key_value:dict, new_key_value:dict):
     return new_dict_
 
 
-def split_list(list_:list, n:int=10) -> List[List]:
+def split_list(list_:list, n:int=13) -> List[List]:
     '''
     This function splits a list into lists of lenght n
     '''

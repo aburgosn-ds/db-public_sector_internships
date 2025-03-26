@@ -20,4 +20,5 @@ def get_soup(url):
         return soup
     
     except Exception as e:
+        logger.error(f"Error getting parsed html: {e}.")
         raise CustomException(e, sys)

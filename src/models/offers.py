@@ -7,20 +7,20 @@ from src.models.cities import Cities
 from src.models.careers import Careers
 from src.models.careers_per_offer import Careers_per_offer
 
-from src.logger import logger
+from src.logger import main_logger
 
 
 class Offers:
 
     def __init__(self):
 
-        logger.info("Initializing Offers class...")
+        main_logger.info("Initializing Offers class...")
 
         self.table_name = 'offers'
         self.table = load_table(self.table_name)
         self.columns = self.table.columns.keys()
 
-        logger.info(f"Offers object initialized. Columns: {self.columns}.")
+        main_logger.info(f"Offers object initialized. Columns: {self.columns}.")
 
     def insert_rows(self, json):
         insert_rows(self.table, self.table_name, json)
@@ -46,5 +46,5 @@ class Offers:
         codes_database = [id[0] for id in codes_database]
         htmls_filtered = [html for code, html in zip(codes, htmls) if code not in codes_database]
 
-        logger.info(f"Job offers htmls where filtered to {len(htmls_filtered)} htmls. Remaining job offers already registered in the database.")
+        main_logger.info(f"Job offers htmls where filtered to {len(htmls_filtered)} htmls. Remaining job offers already registered in the database.")
         return htmls_filtered

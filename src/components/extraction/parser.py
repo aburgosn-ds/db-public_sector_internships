@@ -3,7 +3,7 @@ import sys
 from bs4 import BeautifulSoup
 
 from src.exception import CustomException
-from src.logger import logger
+from src.logger import main_logger
 
 
 def get_soup(url):
@@ -15,10 +15,10 @@ def get_soup(url):
         content = response.text
         soup = BeautifulSoup(content, 'html.parser')
         
-        logger.info("HTML from URL parsed successfully")
+        main_logger.info("HTML from URL parsed successfully")
         
         return soup
     
     except Exception as e:
-        logger.error(f"Error getting parsed html: {e}.")
+        main_logger.error(f"Error getting parsed html: {e}.")
         raise CustomException(e, sys)

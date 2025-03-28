@@ -2,21 +2,37 @@ import logging
 import os
 from datetime import datetime
 
-LOG_FILENAME = f"{datetime.now().strftime('%m_%d_%Y_%H_%M_%S')}.log"
-LOG_DIRNAME = LOG_FILENAME
+# Root directory for logs
+LOGS_BASE_DIR = os.path.join(os.getcwd(), "logs")
 
-log_path = os.path.join(os.getcwd(), 'logs', LOG_DIRNAME)
-os.makedirs(log_path, exist_ok=True)
+def get_logger(name, log_subdir='main'):
+    """
+    Create and return a logger with an own handler.
+    """
+    log_dir = os.path.join(LOGS_BASE_DIR, log_subdir)
+    os.makedirs(log_dir, exist_ok=True)
 
-LOG_FILE_PATH = os.path.join(log_path, LOG_FILENAME)
+    log_filename = f"{datetime.now().strftime('%m_%d_%Y_%H_%M_%S')}.log" if log_subdir == 'main' else 'scheduler.log'
+    log_filepath = os.path.join(log_dir, log_filename)
+
+    logger = logging.getLogger(name)
+
+    # If the logger already has handlers, return it to prevent duplicates
+    if logger.hasHandlers():
+        return logger
+    
+    logger.setLevel(logging.INFO)
+    
+    # Create file handler
+    file_handler = logging.FileHandler(log_filepath)
+    file_handler.setFormatter(logging.Formatter("[ %(asctime)s ] %(name)s %(module)s %(filename)s %(lineno)d - %(levelname)s - %(message)s"))
+    logger.addHandler(file_handler)
+
+    return logger
 
 
-logging.basicConfig(
-    filename=LOG_FILE_PATH,
-    format="[ %(asctime)s ] %(name)s %(module)s %(filename)s %(lineno)d - %(levelname)s - %(message)s",
-    level=logging.INFO,
-    force=True
-)
+# Logger for main execution
+main_logger = get_logger('main_logger', 'main')
 
-# Create a new logger
-logger = logging.getLogger('logger')
+# Logger for the scheduler
+scheduler_logger = get_logger('scheduler_logger', 'scheduler')

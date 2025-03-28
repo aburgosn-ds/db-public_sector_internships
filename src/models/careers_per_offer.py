@@ -2,19 +2,19 @@ from src.database.load_db_metadata import load_table
 from src.database.insert_data import insert_rows
 from src.database.select_data import select_column, select_id
 
-from src.logger import logger
+from src.logger import main_logger
 
 class Careers_per_offer:
 
     def __init__(self):
 
-        logger.info("Initializing Organizations class...")
+        main_logger.info("Initializing Organizations class...")
 
         self.table_name = 'careers_per_offer'
         self.table = load_table(self.table_name)
         self.columns = self.table.columns.keys()
 
-        logger.info(f"Careers_per_offer object initialized. Columns: {self.columns}.")
+        main_logger.info(f"Careers_per_offer object initialized. Columns: {self.columns}.")
         
 
     def insert_rows(self, json, one_by_one=True):

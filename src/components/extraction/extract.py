@@ -7,7 +7,7 @@ from typing import List, Dict
 from bs4 import BeautifulSoup
 from src.components.extraction.parser import get_soup
 
-from src.logger import logger
+from src.logger import main_logger
 from src.exception import CustomException
 
 
@@ -18,21 +18,21 @@ class Extractor:
 
     def __init__(self, url):
 
-        logger.info("Initializing Extractor class...")
+        main_logger.info("Initializing Extractor class...")
 
         self.url = url
         self.soup = get_soup(url)
         self.offers_overview = []
         self.offers_htmls = {}
 
-        logger.info("Extractor class initialized successfully.")
+        main_logger.info("Extractor class initialized successfully.")
 
 
     def extract_offers_overview(self):
         """
         Get job offers information from the overview page, including the URL which contains a detailed description.
         """
-        logger.info("Extracting offers overview information...")
+        main_logger.info("Extracting offers overview information...")
 
         try:
             # List of job offer tags    
@@ -58,12 +58,12 @@ class Extractor:
                     self.offers_overview.append(offer)
 
                 except AttributeError as e:
-                    logger.warning(f"Error extracting an offer, skipping it: {e} ")
+                    main_logger.warning(f"Error extracting an offer, skipping it: {e} ")
 
-            logger.info("Offers overview extraction DONE.")
+            main_logger.info("Offers overview extraction DONE.")
 
         except Exception as e:
-            logger.error("Unexpected error while extracting offers overview: ", exc_info=True)
+            main_logger.error("Unexpected error while extracting offers overview: ", exc_info=True)
             raise CustomException(e, sys)
     
         return self.offers_overview
@@ -97,14 +97,14 @@ class Extractor:
                 html_2 = soup.find('article', attrs={'class': 'oferta'}).text
 
                 if not html_1 or not html_2:
-                    logger.warning(f"Missing elements in offer {url}, skipping.", exc_info=True)
+                    main_logger.warning(f"Missing elements in offer {url}, skipping.", exc_info=True)
                     return {}
         
                 html = html_1 + html_2 + "\nEND OF HTML\n" + str(offer_initial)
                 return {offer_initial['offer_page_code']: html}
             
         except Exception as e:
-            logger.warning(f"Error extracting offer html from {url}, skipping.", exc_info=True)
+            main_logger.warning(f"Error extracting offer html from {url}, skipping.", exc_info=True)
             return {}
     
 
@@ -141,9 +141,9 @@ class Extractor:
         '''
         Execute asynchronous methods and gets all offers htmls, returns together with its corresponding page codes.
         '''
-        logger.info("Extracting offers htmls...")
+        main_logger.info("Extracting offers htmls...")
         self.offers_htmls = asyncio.run(self.__session_get_offers_htmls())
-        logger.info("Offers htmls extraction DONE.")
+        main_logger.info("Offers htmls extraction DONE.")
 
         htmls = list(self.offers_htmls.values())
         codes = list(self.offers_htmls.keys())

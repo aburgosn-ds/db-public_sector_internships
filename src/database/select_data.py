@@ -3,7 +3,7 @@ from sqlalchemy import Table
 
 from src.database.db_connection import get_connection
 from src.exception import CustomException
-from src.logger import logger
+from src.logger import main_logger
 
 import sys
 
@@ -12,7 +12,7 @@ def select_column(table_object, table_name, column_name, limit=None):
     This function selects all column rows from a table from the database
     '''
 
-    logger.info(f"Selecting {column_name} column from {table_name} table...")
+    main_logger.info(f"Selecting {column_name} column from {table_name} table...")
 
     engine = get_connection() # Get engine
 
@@ -23,11 +23,11 @@ def select_column(table_object, table_name, column_name, limit=None):
 
             # Executes the query and gets the output
             result = connection.execute(select_query).fetchall()
-            logger.info(f"{len(result)} rows where succesfully selected from {column_name} column in {table_name} table.")
+            main_logger.info(f"{len(result)} rows where succesfully selected from {column_name} column in {table_name} table.")
             return result
 
     except Exception as e:
-        logger.error(f"Error while fetching the column {column_name} from {table_name} table: {e}")
+        main_logger.error(f"Error while fetching the column {column_name} from {table_name} table: {e}")
         raise CustomException(e, sys)
 
 
@@ -36,7 +36,7 @@ def select_id(table_object: Table, column_name: str, col_value: str, limit: int=
     This function selects the id(s) from a table whose column value is col_value argument
     '''
     table_name = table_object.name
-    logger.info(f"Selecting ids that matches {col_value} in {column_name} column from {table_name} table...")
+    main_logger.info(f"Selecting ids that matches {col_value} in {column_name} column from {table_name} table...")
     
     engine = get_connection() # Get engine
 
@@ -60,9 +60,9 @@ def select_id(table_object: Table, column_name: str, col_value: str, limit: int=
             if len(result) > 0:
                 result = [res._tuple()[0] for res in result]
 
-            logger.info(f"Id(s) from {column_name} column in {table_name} table found successfully: {result}.")
+            main_logger.info(f"Id(s) from {column_name} column in {table_name} table found successfully: {result}.")
             return result
 
     except Exception as e:
-        logger.error(f"Error while selecting ID from table {table_name}. Value to match: {column_name}({col_value}). {e}")
+        main_logger.error(f"Error while selecting ID from table {table_name}. Value to match: {column_name}({col_value}). {e}")
         raise CustomException (e, sys)

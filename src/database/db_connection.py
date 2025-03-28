@@ -4,7 +4,7 @@ import sys
 from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from src.exception import CustomException
-from src.logger import logger
+from src.logger import main_logger
 
 
 # Load environment variables
@@ -31,10 +31,10 @@ def get_connection():
 
         # Check the engine working properly
         with engine.connect() as connection:
-            logger.info("Database connection engine created successfully.")
+            main_logger.info("Database connection engine created successfully.")
 
         return engine
     
     except Exception as e:
-        logger.error(f"Database test connection error:", exc_info=True)
+        main_logger.error(f"Database test connection error:", exc_info=True)
         raise CustomException(e, sys)

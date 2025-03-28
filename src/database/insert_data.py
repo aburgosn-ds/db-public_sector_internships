@@ -7,7 +7,7 @@ from src.database.load_db_metadata import load_table
 from src.database.db_connection import get_connection
 from src.database.select_data import select_id
 from src.exception import CustomException
-from src.logger import logger
+from src.logger import main_logger
 
 from typing import List, Dict, Optional
 
@@ -31,11 +31,11 @@ def insert_rows(table_object: Table, json: List[Dict], one_by_one: bool = True, 
                 _execute_insert(table_object, json, one_by_one, get_pk, inserted_ids, connection)
         
     
-        logger.info(f"Row(s) inserted succesfully in *{table_name}* table. Inserted id(s): {inserted_ids}")
+        main_logger.info(f"Row(s) inserted succesfully in *{table_name}* table. Inserted id(s): {inserted_ids}")
         return inserted_ids
     
     except Exception as e:
-        logger.error(f"Error while inserting data into {table_name} table: ", exc_info=True)
+        main_logger.error(f"Error while inserting data into {table_name} table: ", exc_info=True)
         raise CustomException(e, sys)
         
 
@@ -52,7 +52,7 @@ def _execute_insert(table_object, json, one_by_one, get_pk, inserted_ids, connec
                 if get_pk:
                     inserted_ids.append(result_one.inserted_primary_key[0])
             except Exception as e:
-                logger.warning(f"Error while inserting one row into {table_object.name} table: {e}. Skipping...")
+                main_logger.warning(f"Error while inserting one row into {table_object.name} table: {e}. Skipping...")
 
     else:
         result = connection.execute(insert_query, json)
@@ -126,16 +126,17 @@ def insert_rows_dinamically(main_table: Table, columns: List[str], ref_tables: L
 
                     # Adds the dictionary with keys-values added into the new json 
                     new_json.append(new_dict_)
-                    logger.info(f"Row inserted dynamically in all tables. Main table{main_table_name}, id: {offer_id}")
+                    main_logger.info(f"Row inserted dynamically in all tables. Main table{main_table_name}, id: {offer_id}")
                     print(f"Done. Id: {offer_id}")
 
                 except Exception as e:
                     connection.rollback()
                     failed_inserts.append({'offer_page_code': new_dict_['offer_page_code'], 'url': new_dict_['url']})
-                    logger.warning(f"Rollback. Error while inserting one row into *{main_table_name}* table dinamically. Page code: {new_dict_['offer_page_code']}. Url: {new_dict_['url']}. {e}", exc_info=True)
+                    main_logger.warning(f"Rollback. Error while inserting one row into *{main_table_name}* table dinamically. Page code: {new_dict_['offer_page_code']}. Url: {new_dict_['url']}. {e}", exc_info=True)
 
-        logger.info(f"Data inserted successfully and dynamically into *{main_table_name}* table.\n\tIds:\n\t\tSuccessful inserts: {success_inserts}.\n\t\tUnsuccessful inserts: {failed_inserts} ")
+        main_logger.info(f"Data inserted successfully and dynamically into *{main_table_name}* table.\n\tIds:\n\t\tSuccessful inserts: {success_inserts}.\n\t\tUnsuccessful inserts: {failed_inserts} ")
+        return failed_inserts
 
     except Exception as e:
-        logger.error(f"Error database transaction into {main_table_name} table: ", exc_info=True)
+        main_logger.error(f"Error database transaction into {main_table_name} table: ", exc_info=True)
         raise CustomException(e, sys)

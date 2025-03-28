@@ -17,10 +17,15 @@ asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 class Extractor:
 
     def __init__(self, url):
+
+        logger.info("Initializing Extractor class...")
+
         self.url = url
         self.soup = get_soup(url)
         self.offers_overview = []
         self.offers_htmls = {}
+
+        logger.info("Extractor class initialized successfully.")
 
 
     def extract_offers_overview(self):
@@ -93,14 +98,14 @@ class Extractor:
 
                 if not html_1 or not html_2:
                     logger.warning(f"Missing elements in offer {url}, skipping.", exc_info=True)
-                    return None
+                    return {}
         
                 html = html_1 + html_2 + "\nEND OF HTML\n" + str(offer_initial)
                 return {offer_initial['offer_page_code']: html}
             
         except Exception as e:
             logger.warning(f"Error extracting offer html from {url}, skipping.", exc_info=True)
-            return None
+            return {}
     
 
     async def __async_tasks_offer_html(self, session, offers_initial:List[Dict]) -> List[str]:

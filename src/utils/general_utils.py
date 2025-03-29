@@ -2,7 +2,7 @@ import json
 from typing import List, Dict, Union
 
 
-def split_list(list_: list, n: int=13) -> List[List]:
+def split_list(list_: list, n: int=12) -> List[List]:
     '''
     Splits a list into a list of lists of lenght n.
     '''

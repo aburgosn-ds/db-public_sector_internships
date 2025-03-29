@@ -3,7 +3,7 @@ Inserts all careers to the careers table.
 '''
 
 from src.utils.general_utils import read_to_json, get_careers
-from src.database.careers_data.constants import CAREERS_PATH
+from src.constants.careers_data_constants import CAREERS_PATH
 from src.models.careers import Careers
 
 

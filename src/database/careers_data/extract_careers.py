@@ -11,7 +11,7 @@ import pathlib
 import json
 from src.utils.general_utils import write_to_file
 
-from src.database.careers_data.constants import SYSTEM_INSTRUCTIONS, PROMPT_1, PROMPT_2, PDF_PTH
+from src.constants.careers_data_constants import SYSTEM_INSTRUCTIONS, PROMPT_1, PROMPT_2, PDF_PTH
 
 
 def main():

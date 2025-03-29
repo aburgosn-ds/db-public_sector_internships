@@ -26,14 +26,16 @@ class Offers:
         insert_rows(self.table, json)
 
     def insert_rows_dinamically(self, json):
-        
-        return insert_rows_dinamically(
+        if json:
+            return insert_rows_dinamically(
                                 self.table,
                                 columns=['city_id', 'organization_id', 'careers_id'], 
                                 ref_tables=[Cities().table, Organizations().table, Careers().table], 
                                 ref_columns=[('city', 'name'), ('organization', 'name'), ('careers', 'name')], 
                                 json=json,
                                 connection_tables=[Careers_per_offer().table])
+        else:
+            return []
         
     def select_column(self, column_name, limit=None):
         return select_column(self.table, self.table_name, column_name, limit)

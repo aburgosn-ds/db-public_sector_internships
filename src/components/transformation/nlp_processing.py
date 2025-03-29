@@ -78,7 +78,11 @@ class Processor:
         '''
         Executes the asyncronous method to get the job offers details.
         '''
-        main_logger.info("Getting job details with gemini...")
-        result = asyncio.run(self._get_job_details_all(self.offers_html, save))
-        main_logger.info("Job details extraction DONE.")
-        return ready_to_insert(result)
+        if self.offers_html:
+            main_logger.info("Getting job details with gemini...")
+            result = asyncio.run(self._get_job_details_all(self.offers_html, save))
+            main_logger.info("Job details extraction DONE.")
+            return ready_to_insert(result)
+
+        else:
+            return []

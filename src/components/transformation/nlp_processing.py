@@ -10,7 +10,8 @@ from google.generativeai.generative_models import GenerativeModel
 
 from src.utils.general_utils import split_list, write_to_file
 from src.constants.transformation_constants import SYS_INSTRUCTIONS
-from src.logger import logger
+from src.utils.transformation_utils import ready_to_insert
+from src.logger import main_logger
 
 load_dotenv()
 genai.configure(api_key=os.environ['API_KEY'])
@@ -65,7 +66,7 @@ class Processor:
                 json_ = await task
                 jsons.extend(json_)      
             except Exception as e:
-                logger.warning(f"Task failed: {e}")
+                main_logger.warning(f"Task failed: {e}")
 
         if save:
             write_to_file(jsons, 'temp.json')
@@ -77,7 +78,7 @@ class Processor:
         '''
         Executes the asyncronous method to get the job offers details.
         '''
-        logger.info("Getting job details with gemini...")
+        main_logger.info("Getting job details with gemini...")
         result = asyncio.run(self._get_job_details_all(self.offers_html, save))
-        logger.info("Job details extraction DONE.")
-        return result
+        main_logger.info("Job details extraction DONE.")
+        return ready_to_insert(result)

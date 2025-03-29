@@ -83,7 +83,7 @@ class Extractor:
     async def __get_offer_html(self, session, offer_initial: dict) -> dict:
         """
         Asynchronously gets html of the whole description from an offer 
-        as a dict with key: offer_page_code and value: html
+        as a dict with key: offer_page_code and value: html.
         """
         url = offer_initial['url']
 

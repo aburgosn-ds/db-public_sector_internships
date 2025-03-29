@@ -9,7 +9,7 @@ import sys
 
 def select_column(table_object, table_name, column_name, limit=None):
     '''
-    This function selects all column rows from a table from the database
+    Selects all column rows from a table from the database.
     '''
 
     main_logger.info(f"Selecting {column_name} column from {table_name} table...")
@@ -33,7 +33,7 @@ def select_column(table_object, table_name, column_name, limit=None):
 
 def select_id(table_object: Table, column_name: str, col_value: str, limit: int=None):
     '''
-    This function selects the id(s) from a table whose column value is col_value argument
+    Selects the id(s) from a table whose column value is col_value argument.
     '''
     table_name = table_object.name
     main_logger.info(f"Selecting ids that matches {col_value} in {column_name} column from {table_name} table...")

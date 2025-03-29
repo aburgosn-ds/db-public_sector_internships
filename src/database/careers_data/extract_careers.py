@@ -5,6 +5,7 @@ Writes careers and their classifications from a PDF to a JSON file.
 from google import genai
 from google.genai import types
 from dotenv import load_dotenv
+
 import os
 import pathlib
 import json

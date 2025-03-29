@@ -7,7 +7,7 @@ import sys
 
 def load_metadata(engine = None):
     '''
-    This function loads the database and returns the metadata
+    Loads the database and returns the metadata.
     '''
     # Get engine if not provided
     if not engine:

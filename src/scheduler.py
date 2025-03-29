@@ -1,9 +1,7 @@
 from apscheduler.schedulers.blocking import BlockingScheduler
-from apscheduler.triggers.cron import CronTrigger
 from datetime import datetime, timedelta
 from src.logger import scheduler_logger
 
-import time
 import subprocess
 import os
 

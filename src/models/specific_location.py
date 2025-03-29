@@ -2,9 +2,6 @@ from src.database.load_db_metadata import load_metadata
 from src.database.insert_data import insert_rows
 from src.database.select_data import select_column
 
-from src.logger import main_logger
-from src.exception import CustomException
-
 
 metadata = load_metadata()
 class Location:

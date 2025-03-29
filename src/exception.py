@@ -2,7 +2,7 @@ import sys
 
 def error_message_details(error, error_detail:sys):
     '''
-    Customize the error message to be shown by Exception object
+    Customize the error message to be shown by Exception object.
     '''
     _, _, exc_tb = error_detail.exc_info()
     filename = exc_tb.tb_frame.f_code.co_filename

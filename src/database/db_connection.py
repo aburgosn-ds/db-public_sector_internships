@@ -20,7 +20,7 @@ DATABASE = os.getenv('DB_NAME')
 
 def get_connection():
     '''
-    Gets the connection engine
+    Gets the connection engine.
     '''
     # URL for database connection
     DATABASE_URL = f"mysql+mysqlconnector://{USERNAME}:{PASSWORD}@{HOST}:{PORT}/{DATABASE}"

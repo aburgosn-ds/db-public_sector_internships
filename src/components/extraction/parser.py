@@ -8,14 +8,14 @@ from src.logger import main_logger
 
 def get_soup(url):
     '''
-    Gets the html of a web page and parses it. Returns soup object
+    Gets the html of a web page and parses it. Returns soup object.
     '''
     try:
         response = requests.get(url)
         content = response.text
         soup = BeautifulSoup(content, 'html.parser')
         
-        main_logger.info("HTML from URL parsed successfully")
+        main_logger.info("HTML from URL parsed successfully.")
         
         return soup
     

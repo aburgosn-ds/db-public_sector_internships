@@ -86,9 +86,3 @@ def ready_to_insert(json: List[Dict]):
     cleaned = clean_json(json)
     corrected = correct_format(cleaned)
     return corrected
-
-
-def validate_offer_detail(offer_detail: Dict):
-    '''
-    Assess format for each value. Returns true if the offer has a validate format, or false otherwise.
-    '''

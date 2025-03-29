@@ -62,7 +62,7 @@ def _execute_insert(table_object, json, one_by_one, get_pk, inserted_ids, connec
         
 def insert_rows_dinamically(main_table: Table, columns: List[str], ref_tables: List[Table], ref_columns: List[str], json: List[Dict], connection_tables: List[Table]):
     '''
-    This function inserts new rows into a table dinamically, when this table has one or more foreign keys.
+    Inserts new rows into a table dinamically, when this table has one or more foreign keys.
     Adds data to the table if the referenced columns has values or add a value into the referenced table first.
     '''
     engine = get_connection()
@@ -127,14 +127,14 @@ def insert_rows_dinamically(main_table: Table, columns: List[str], ref_tables: L
                     # Adds the dictionary with keys-values added into the new json 
                     new_json.append(new_dict_)
                     main_logger.info(f"Row inserted dynamically in all tables. Main table{main_table_name}, id: {offer_id}")
-                    print(f"Done. Id: {offer_id}")
+                    # print(f"Done. Id: {offer_id}")
 
                 except Exception as e:
                     connection.rollback()
                     failed_inserts.append({'offer_page_code': new_dict_['offer_page_code'], 'url': new_dict_['url']})
                     main_logger.warning(f"Rollback. Error while inserting one row into *{main_table_name}* table dinamically. Page code: {new_dict_['offer_page_code']}. Url: {new_dict_['url']}. {e}", exc_info=True)
 
-        main_logger.info(f"Data inserted successfully and dynamically into *{main_table_name}* table.\n\tIds:\n\t\tSuccessful inserts: {success_inserts}.\n\t\tUnsuccessful inserts: {failed_inserts} ")
+        main_logger.info(f"Data inserted successfully and dynamically into *{main_table_name}* table.\n\tIds:\n\t\tSuccessful inserts: {success_inserts}.\n\t\tUnsuccessful inserts: {failed_inserts}.")
         return failed_inserts
 
     except Exception as e:

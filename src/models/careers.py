@@ -19,7 +19,7 @@ class Careers:
 
 
     def insert_rows(self, json, one_by_one, get_pk):
-        insert_rows(self.table_name, json, one_by_one, get_pk)
+        insert_rows(self.table, json, one_by_one, get_pk)
     
     def select_column(self, column_name, limit=None):
-        return select_column(self.table_name, column_name, limit)
+        return select_column(self.table, self.table_name, column_name, limit)

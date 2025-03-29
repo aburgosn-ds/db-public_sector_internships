@@ -15,7 +15,7 @@ class Location:
         self.columns = self.table.columns.keys()
 
     def insert_rows(self, json):
-        insert_rows(self.table_name, json)
+        insert_rows(self.table, json)
     
     def select_column(self, column_name, limit=None):
-        return select_column(self.table_name, column_name, limit)
+        return select_column(self.table, self.table_name, column_name, limit)

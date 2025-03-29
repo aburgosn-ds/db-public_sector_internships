@@ -19,11 +19,11 @@ class Organizations:
         
 
     def insert_rows(self, json, one_by_one=True):
-        ids_inserted = insert_rows(self.table_name, json, one_by_one)
+        ids_inserted = insert_rows(self.table, json, one_by_one)
         return ids_inserted
     
     def select_column(self, column_name, limit=None):
-        return select_column(self.table_name, column_name, limit)
+        return select_column(self.table, self.table_name, column_name, limit)
     
     def select_id(self, col_value):
-        return select_id(self.table_name, column_name='name', col_value=col_value)
+        return select_id(self.table, column_name='name', col_value=col_value)

@@ -23,7 +23,7 @@ class Offers:
         main_logger.info(f"Offers object initialized. Columns: {self.columns}.")
 
     def insert_rows(self, json):
-        insert_rows(self.table, self.table_name, json)
+        insert_rows(self.table, json)
 
     def insert_rows_dinamically(self, json):
         

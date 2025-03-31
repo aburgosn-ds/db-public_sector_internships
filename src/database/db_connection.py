@@ -8,7 +8,7 @@ from src.logger import main_logger
 
 
 # Load environment variables
-load_dotenv()
+load_dotenv(override=True)
 
 # Connection variables
 USERNAME = os.getenv('DB_USER')

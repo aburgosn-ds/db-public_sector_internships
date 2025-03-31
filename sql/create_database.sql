@@ -1,6 +1,6 @@
 ##### Database #####
-CREATE DATABASE IF NOT EXISTS `test`;
-USE `test`;
+CREATE DATABASE IF NOT EXISTS `public_sector_internships`;
+USE `public_sector_internships`;
 
 ##### Tables #####
 CREATE TABLE IF NOT EXISTS cities (
@@ -89,3 +89,8 @@ SELECT
 id, offer_page_code, offer_title, vacants, `type`, to_apply, organization_id, specific_requirements, knowledge, salary, responsabilities, specific_location, city_id, end_date, url, `current_date`
 FROM offers 
 WHERE `active` = 0;
+
+
+##### Users #####
+CREATE USER 'user' IDENTIFIED BY '';
+GRANT SELECT ON `public_sector_internships`.* to 'user';

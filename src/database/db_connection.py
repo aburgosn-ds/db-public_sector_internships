@@ -1,6 +1,7 @@
 import os
 import sys
 
+from urllib.parse import quote_plus
 from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from src.exception import CustomException
@@ -12,7 +13,7 @@ load_dotenv(override=True)
 
 # Connection variables
 USERNAME = os.getenv('DB_USER')
-PASSWORD = os.getenv('DB_PASSWORD')
+PASSWORD = quote_plus(os.getenv('DB_PASSWORD')) # Quote plus codifies special characters
 HOST = os.getenv('DB_HOST')
 PORT = os.getenv('DB_PORT')
 DATABASE = os.getenv('DB_NAME')

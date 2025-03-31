@@ -14,7 +14,7 @@ def main():
     htmls_filtered = offers.filter_htmls(htmls, codes)
 
     # 3. Process html and get the json
-    processor = Processor(htmls_filtered[0:2])
+    processor = Processor(htmls_filtered)
     offer_details = processor.get_job_details()
 
     # 4. Insert data

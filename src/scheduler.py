@@ -15,11 +15,11 @@ PYTHON_EXEC = os.path.join(VENV_PATH, 'python.exe')
 scheduler = BlockingScheduler()
 
 # Minutes to retry
-minutes_retry = 1
+minutes_retry = 5
 
 # Time for everyday execution
 hour_day = 8
-minute_day = 3
+# minute_day = 30
 
 def execute_script():
     """
@@ -47,8 +47,8 @@ def execute_script():
 
 
 # Program the automation execution everyday at 08 hours
-# scheduler.add_job(execute_script, "cron", hour=hour_day, next_run_time=datetime.now())
-scheduler.add_job(execute_script, "interval", minutes=minute_day, next_run_time=datetime.now())
+scheduler.add_job(execute_script, "cron", hour=hour_day, next_run_time=datetime.now())
+# scheduler.add_job(execute_script, "interval", minutes=minute_day, next_run_time=datetime.now())
 
 if __name__ == '__main__':
     scheduler_logger.info("Initilizing scheduler...")

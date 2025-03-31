@@ -94,3 +94,5 @@ WHERE `active` = 0;
 ##### Users #####
 CREATE USER 'user' IDENTIFIED BY '';
 GRANT SELECT ON `public_sector_internships`.* to 'user';
+GRANT SHOW VIEW ON `public_sector_internships`.* to 'user';
+FLUSH PRIVILEGES;

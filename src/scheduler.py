@@ -9,7 +9,8 @@ import os
 VENV_PATH = os.path.join(os.path.dirname(__file__), '../venv')
 
 # Python path within venv
-PYTHON_EXEC = os.path.join(VENV_PATH, 'python.exe')
+# PYTHON_EXEC = os.path.join(VENV_PATH, 'python.exe')
+PYTHON_EXEC = os.path.join(VENV_PATH, 'python3')
 
 # Initialize the scheduler
 scheduler = BlockingScheduler()

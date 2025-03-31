@@ -12,7 +12,7 @@ from src.exception import CustomException
 
 
 # Changes the asyncronous execution policy for Windows 
-asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+#asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
 class Extractor:
 

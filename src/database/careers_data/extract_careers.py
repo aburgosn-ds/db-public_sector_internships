@@ -1,5 +1,5 @@
 '''
-Writes careers and their classifications from a PDF to a JSON file.
+Extract, process and load careers data from a PDF to a json file.
 '''
 
 from google import genai

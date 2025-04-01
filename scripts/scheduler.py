@@ -31,7 +31,7 @@ def execute_script():
 
     try: 
 
-        script_path = os.path.join(os.path.dirname(__file__), "../main.py")
+        script_path = os.path.join(os.path.dirname(__file__), "main.py")
         result = subprocess.run([PYTHON_EXEC, script_path], capture_output=True, text=True, check=True)
         output = result.stdout.strip()
 

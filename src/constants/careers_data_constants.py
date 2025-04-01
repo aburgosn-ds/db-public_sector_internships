@@ -164,5 +164,5 @@ Ejemplo:
 
 Recuerda cerrar el diccionario.
 """
-PDF_PTH="E:/Content/Downloads/Clasificador de Carreras e Instituciones de Educación Superior y Técnico Productivas-37-53.pdf"
+PDF_PTH="data\data_tables\Clasificador de Carreras e Instituciones de Educación Superior y Técnico Productivas.pdf"
 CAREERS_PATH="data\data_tables\careers.json"

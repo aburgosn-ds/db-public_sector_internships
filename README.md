@@ -23,8 +23,8 @@ This project implements a relational database system to store, process and analy
     📂 models/ → Table class models definition.
     
     📂 utils/ → Auxiliar Functions.
-    
-    📂 constants/ → Separated constants.
+
+    📂 constants/ → Table class models definition.
     
 📂 scripts/ → Execution that performs ETL, once or schedulered.
 

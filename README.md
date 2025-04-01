@@ -13,14 +13,23 @@ This project implements a relational database system to store, process and analy
 ## Project Structure
 
 📂 sql/ → SQL scripts for table and database creation.
+
 📂 src/ → Main code of the project:
+
     📂 components/ → Modules for extraction and transformation.
+    
     📂 database/ → Database conection, queries, and inserts.
+    
     📂 models/ → Table class models definition.
+    
     📂 utils/ → Auxiliar Functions.
+    
     📂 constants/ → Separated constants.
+    
 📂 scripts/ → Execution that performs ETL, once or schedulered.
+
 📂 data/ → JSON data files used in the project.
+
 📂 dashboards/ → Visualizations and reports.
 
 ## Database ERD

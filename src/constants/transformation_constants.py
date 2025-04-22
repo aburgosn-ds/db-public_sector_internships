@@ -80,7 +80,8 @@ SYS_INSTRUCTIONS = '''Leerás htmls, cada uno perteneciente a una página web qu
         - Modalidad de prácticas: PROFESIONAL O PRE-PROFESIONAL
         - SOLO puede ser cualquiera de los dos strings: PROFESIONAL O PRE-PROFESIONAL
         - Convertir a MAYÚSCULA
-        - Si no hay, string vacío: ""
+        - Si no aparece explicitamente la palabra infierelo, por ejemplo, si aparece "egresado o bachiller..." entonces corresponde a PROFESIONAL, y si aparece "estudiante de x ciclo ..." entonces corresponde PRE-PROFESIONAL.
+        - Si no es posible inferirlo, string vacío: ""
     organization: 
         - Nombre de la entidad pública convertido a MAYÚSCULAS
         - Si no hay, string vacío: ""

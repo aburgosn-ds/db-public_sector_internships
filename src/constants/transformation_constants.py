@@ -111,7 +111,9 @@ SYS_INSTRUCTIONS = '''Leerás htmls, cada uno perteneciente a una página web qu
         - Cada actividad a realizar como elemento de lista
         - Si no hay, lista vacía: []
     city: 
+        - Departamento del Perú en el cual se darán las prácticas. En el caso de Callao, asumir que es departamento.
         - Información después del HTML
+        - Si no es un departamento (es provincia o distrito) inferir a qué departamento pertenece.
         - Convertido en MAYÚSCULAS
         - Si no hay, string vacío: ""
     specific_location: 

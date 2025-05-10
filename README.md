@@ -2,7 +2,7 @@
 Database to manage and analyse internship offers for the public sector.
 
 ## Description
-This project implements a relational database system to store, process and analyse information about internship offers in the peruvian public sector. Includes ETL (extract, transform, and load data) that gather information from the webpage https://www.convocatoriasdetrabajo.com/, normalize data and store then in a relational database daily. Database and automatic execution is implemented with Amazon RDS and Amazon EC2. 
+This project implements a relational database system to store, process and analyse information about internship offers in the peruvian public sector. Includes ETL (extract, transform, and load data) that gather information from the webpage https://www.convocatoriasdetrabajo.com/, process and normalize data with Gemini NLP and store in a relational database daily. Database and automatic execution is implemented with Amazon RDS and Amazon EC2. 
 
 ## Technologies Used
 - Database: MySQL (Amazon RDS)

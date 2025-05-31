@@ -2,13 +2,17 @@
 Database to manage and analyse internship offers for the public sector.
 
 ## Description
-This project implements a relational database system to store, process and analyse information about internship offers in the peruvian public sector. Includes ETL (extract, transform, and load data) that gather information from the webpage https://www.convocatoriasdetrabajo.com/, normalize data and store then in a relational database daily. Database and automatic execution is implemented with Amazon RDS and Amazon EC2. 
+This project implements a relational database system to store, process, and analyze information about internship offers in the Peruvian public sector. It includes an automated ETL pipeline that performs web scraping of the site https://www.convocatoriasdetrabajo.com/ to extract both structured data and full HTML content.
+
+Extracted content is processed using the Gemini Product (Google Generative AI API) to perform semantic cleaning, key information extraction, and inference, generating normalized JSON outputs. The transformed data is then inserted into a MySQL database hosted on Amazon RDS.
+
+The ETL process runs daily on an Amazon EC2 instance, and data is accessed for visualization and analysis using Power BI, which connects to the database via an SSH tunnel.
 
 ## Technologies Used
 - Database: MySQL (Amazon RDS)
-- Backent and ETL: Python 3, Gemini NLP, SQLAlchemy
-- Analysis and Visualization: Pandas, Power BI
-- Deployment: Amazon EC2
+- Backent and ETL: Python 3, BeautifulSoup, SQLAlchemy, Google Gemini API (GenAI)
+- Deployment & Automation: Amazon EC2, cron jobs
+- Analysis and Visualization: Power BI
 
 ## Project Structure
 

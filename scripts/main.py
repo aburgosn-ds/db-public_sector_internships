@@ -19,7 +19,6 @@ def main():
 
     # 4. Insert data
     failed_offers = offers.insert_rows_dinamically(offer_details)
-    print(failed_offers)
 
 if __name__ == '__main__':
     main()
